@@ -1,23 +1,16 @@
-{% extends 'base.html' %}
-{% block title %}Tableau de bord{% endblock %}
-{% block content %}
-<h3>📋 Vos serveurs administrables :</h3>
-<div class="row">
-{% for g in guilds %}
-  <div class="col-md-4 mb-4">
-    <div class="card shadow-sm p-3">
-      {% if g.icon %}
-        <img class="rounded mb-2" src="https://cdn.discordapp.com/icons/{{ g.id }}/{{ g.icon }}.png" width="50">
-      {% endif %}
-      <h5>{{ g.name }}</h5>
-      {% if g.bot_present %}
-        <span class="badge bg-success mb-2">✅ Bot déjà ajouté</span>
-        <a class="btn btn-outline-primary" href="/manage/{{ g.id }}">Gérer</a>
-      {% else %}
-        <a class="btn btn-success mt-2" href="https://discord.com/oauth2/authorize?client_id={{ client_id }}&scope=bot&permissions=8&guild_id={{ g.id }}">➕ Ajouter le bot</a>
-      {% endif %}
-    </div>
-  </div>
-{% endfor %}
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+  <h1>Bienvenue {{ user.username }}#{{ user.discriminator }}</h1>
+  <h2>Voici tes serveurs :</h2>
+  <ul>
+    {% for guild in guilds %}
+      <li>{{ guild.name }} - <a href="/manage/{{ guild.id }}">Gérer</a></li>
+    {% endfor %}
+  </ul>
+  <a href="/logout">Se déconnecter</a>
+</body>
+</html>
