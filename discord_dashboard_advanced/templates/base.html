@@ -3,17 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Dashboard{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+    .card {
+      background-color: #1e1e1e;
+      color: white;
+    }
+    .form-control, .btn {
+      border-radius: 0.5rem;
+    }
+    .navbar {
+      border-bottom: 2px solid #0d6efd;
+    }
+  </style>
 </head>
-<body class="bg-dark text-light">
-  <nav class="navbar navbar-dark bg-primary mb-4 px-4">
-    <span class="navbar-brand mb-0 h1">🎮 Discord Live Manager</span>
-    {% if session['user'] %}
-      <span class="text-white">Connecté : {{ session['user']['username'] }}#{{ session['user']['discriminator'] }}</span>
-      <a href="/logout" class="btn btn-outline-light ms-3">Se déconnecter</a>
-    {% endif %}
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 py-3">
+    <div class="container-fluid">
+      <span class="navbar-brand fw-bold">🎮 Discord Live Manager</span>
+      <div class="d-flex align-items-center">
+        {% if session['user'] %}
+          <span class="me-3">Connecté : {{ session['user']['username'] }}#{{ session['user']['discriminator'] }}</span>
+          <a href="/logout" class="btn btn-outline-light">Déconnexion</a>
+        {% endif %}
+      </div>
+    </div>
   </nav>
-  <div class="container">
+
+  <div class="container py-4">
     {% block content %}{% endblock %}
   </div>
 </body>

@@ -1,24 +1,28 @@
 {% extends 'base.html' %}
 {% block title %}Gestion du serveur{% endblock %}
 {% block content %}
-<h3>🎛️ Configuration du serveur : {{ guild_name }}</h3>
-<form method="POST">
-  <div class="mb-3">
-    <label class="form-label">Chaîne YouTube</label>
-    <input type="text" class="form-control" name="youtube" value="{{ config.youtube or '' }}">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Chaîne Twitch</label>
-    <input type="text" class="form-control" name="twitch" value="{{ config.twitch or '' }}">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Compte TikTok</label>
-    <input type="text" class="form-control" name="tiktok" value="{{ config.tiktok or '' }}">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Salon d'annonce (ID)</label>
-    <input type="text" class="form-control" name="channel_id" value="{{ config.channel_id or '' }}">
-  </div>
-  <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
-</form>
+<div class="card shadow-sm p-4">
+  <h3 class="mb-4">🎛️ Configuration du serveur : <strong>{{ guild_name }}</strong></h3>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">🔴 Chaîne YouTube</label>
+      <input type="text" class="form-control" name="youtube" value="{{ config.youtube or '' }}" placeholder="URL de la chaîne YouTube">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">🟣 Chaîne Twitch</label>
+      <input type="text" class="form-control" name="twitch" value="{{ config.twitch or '' }}" placeholder="Nom de la chaîne Twitch">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">⚫ Compte TikTok</label>
+      <input type="text" class="form-control" name="tiktok" value="{{ config.tiktok or '' }}" placeholder="@NomUtilisateur TikTok">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">📢 Salon d'annonce (ID)</label>
+      <input type="text" class="form-control" name="channel_id" value="{{ config.channel_id or '' }}" placeholder="ID du salon Discord">
+    </div>
+    <div class="d-grid gap-2">
+      <button type="submit" class="btn btn-success btn-lg">💾 Enregistrer les modifications</button>
+    </div>
+  </form>
+</div>
 {% endblock %}

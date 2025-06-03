@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Connexion{% endblock %}
+
 {% block content %}
-<div class="text-center">
-  <h2>Bienvenue sur le dashboard 🎮</h2>
-  <p>Connecte-toi pour gérer les annonces live de ton serveur Discord.</p>
-  <a class="btn btn-primary mt-3" href="{{ url_for('login') }}">🔐 Connexion via Discord</a>
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="text-center p-5 shadow rounded bg-white">
+    <h2 class="mb-3">👋 Bienvenue sur le Dashboard</h2>
+    <p class="mb-4">Connecte-toi avec ton compte Discord pour gérer ton serveur et personnaliser les alertes.</p>
+    <a class="btn btn-lg btn-primary" href="{{ oauth_url }}">
+      🔐 Connexion via Discord
+    </a>
+  </div>
 </div>
 {% endblock %}
