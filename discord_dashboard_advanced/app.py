@@ -1,4 +1,4 @@
-# app.py (corrigé complet)
+# app.py (corrigé complet avec gestion config serveur)
 
 from flask import Flask, redirect, request, session, url_for, render_template
 import requests
@@ -82,11 +82,41 @@ def logout():
     session.clear()
     return redirect('/')
 
-@app.route('/manage/<int:guild_id>')
+@app.route('/manage/<int:guild_id>', methods=['GET', 'POST'])
 def manage_server(guild_id):
     if 'user' not in session:
         return redirect('/')
-    return render_template("manage.html", guild_id=guild_id)
+
+    guilds_resp = requests.get(
+        f"{API_BASE_URL}/users/@me/guilds",
+        headers={
+            'Authorization': f"Bearer {session['access_token']}"
+        }
+    )
+    guilds = guilds_resp.json()
+    guild = next((g for g in guilds if int(g['id']) == guild_id), None)
+
+    if not guild:
+        return "Serveur introuvable ou accès refusé.", 403
+
+    guild_name = guild["name"]
+
+    # Fausse base de données temporaire (à remplacer par une vraie DB)
+    config = {
+        "youtube": "",
+        "twitch": "",
+        "tiktok": "",
+        "channel_id": ""
+    }
+
+    if request.method == "POST":
+        config["youtube"] = request.form.get("youtube")
+        config["twitch"] = request.form.get("twitch")
+        config["tiktok"] = request.form.get("tiktok")
+        config["channel_id"] = request.form.get("channel_id")
+        print(f"[SAVE] Nouvelle configuration pour {guild_name}:", config)
+
+    return render_template("manage.html", guild_id=guild_id, guild_name=guild_name, config=config)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000, debug=True)
