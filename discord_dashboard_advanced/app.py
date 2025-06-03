@@ -1,4 +1,4 @@
-# app.py (extrait mis à jour)
+# app.py (corrigé complet)
 
 from flask import Flask, redirect, request, session, url_for, render_template
 import requests
@@ -19,7 +19,7 @@ DISCORD_OAUTH_URL = f"https://discord.com/api/oauth2/authorize?client_id={DISCOR
 
 @app.route('/')
 def index():
-    return render_template("login.html")
+    return render_template("login.html", oauth_url=DISCORD_OAUTH_URL)
 
 @app.route('/callback')
 def callback():
