@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Gestion du serveur{% endblock %}
+{% block content %}
+<h3>🎛️ Configuration du serveur : {{ guild_name }}</h3>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Chaîne YouTube</label>
+        <input type="text" class="form-control" name="youtube" value="{{ config.youtube or '' }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Chaîne Twitch</label>
+        <input type="text" class="form-control" name="twitch" value="{{ config.twitch or '' }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Compte TikTok</label>
+        <input type="text" class="form-control" name="tiktok" value="{{ config.tiktok or '' }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Salon d'annonce (ID)</label>
+        <input type="text" class="form-control" name="channel_id" value="{{ config.channel_id or '' }}">
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+</form>
+{% endblock %}
