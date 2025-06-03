@@ -69,6 +69,9 @@ def dashboard():
         'Authorization': f"Bearer {session['access_token']}"
     }).json()
 
+    # On garde uniquement ceux où l'utilisateur est admin (permissions & 0x8)
+    guilds = [g for g in guilds_raw if int(g['permissions']) & 0x8]
+
     return render_template("dashboard.html", user=user, guilds=guilds)
 
 # 🔹 Déconnexion
