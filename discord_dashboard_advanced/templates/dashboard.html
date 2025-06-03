@@ -1,13 +1,33 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<h3>🧭 Tes serveurs (où tu es admin)</h3>
-<ul class="list-group">
-  {% for guild in guilds %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      {{ guild.name }}
-      <a href="/manage/{{ guild.id }}" class="btn btn-sm btn-outline-light">Gérer</a>
-    </li>
-  {% endfor %}
-</ul>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Bienvenue, {{ user.username }}#{{ user.discriminator }}</h2>
+    <a class="btn btn-danger" href="/logout">Se déconnecter</a>
+  </div>
+
+  <h4 class="mb-3">Vos serveurs administrés :</h4>
+  {% if guilds %}
+  <div class="row">
+    {% for guild in guilds %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        {% if guild.icon %}
+        <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.png" class="card-img-top" alt="{{ guild.name }}">
+        {% else %}
+        <img src="https://via.placeholder.com/256x256?text=Discord" class="card-img-top" alt="Aucune icône">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ guild.name }}</h5>
+          <a href="/manage/{{ guild.id }}" class="btn btn-primary w-100">Gérer</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">Aucun serveur où vous êtes administrateur n'a été trouvé.</p>
+  {% endif %}
+</div>
 {% endblock %}

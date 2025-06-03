@@ -1,6 +1,8 @@
-import os
+# app.py (extrait mis à jour)
+
 from flask import Flask, redirect, request, session, url_for, render_template
 import requests
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,17 +17,10 @@ API_BASE_URL = "https://discord.com/api/v10"
 OAUTH_SCOPE = "identify guilds"
 DISCORD_OAUTH_URL = f"https://discord.com/api/oauth2/authorize?client_id={DISCORD_CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code&scope={OAUTH_SCOPE.replace(' ', '%20')}"
 
-# 🔹 Page d'accueil
 @app.route('/')
 def index():
     return render_template("login.html")
 
-# 🔹 Route appelée par le bouton "Connexion"
-@app.route('/login')
-def login():
-    return redirect(DISCORD_OAUTH_URL)
-
-# 🔹 Redirection après autorisation Discord
 @app.route('/callback')
 def callback():
     code = request.args.get('code')
@@ -57,36 +52,41 @@ def callback():
     session['user'] = user_info
     return redirect('/dashboard')
 
-# 🔹 Dashboard
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
         return redirect('/')
 
-    user = session['user']
+    try:
+        user = session['user']
 
-    guilds = requests.get(f"{API_BASE_URL}/users/@me/guilds", headers={
-        'Authorization': f"Bearer {session['access_token']}"
-    }).json()
+        guilds_resp = requests.get(
+            f"{API_BASE_URL}/users/@me/guilds",
+            headers={
+                'Authorization': f"Bearer {session['access_token']}"
+            }
+        )
+        guilds_resp.raise_for_status()
+        all_guilds = guilds_resp.json()
 
-    # On garde uniquement ceux où l'utilisateur est admin (permissions & 0x8)
-    guilds = [g for g in guilds_raw if int(g['permissions']) & 0x8]
+        filtered_guilds = [g for g in all_guilds if int(g.get('permissions', 0)) & 0x20]
 
-    return render_template("dashboard.html", user=user, guilds=guilds)
+        return render_template("dashboard.html", user=user, guilds=filtered_guilds)
 
-# 🔹 Déconnexion
+    except Exception as e:
+        print("[ERROR] Dashboard failed:", e)
+        return "Erreur interne dans le dashboard.", 500
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
 
-# 🔹 Gestion serveur
 @app.route('/manage/<int:guild_id>')
 def manage_server(guild_id):
     if 'user' not in session:
         return redirect('/')
     return render_template("manage.html", guild_id=guild_id)
 
-# 🔹 Démarrage Flask pour Render
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=10000, debug=True)
